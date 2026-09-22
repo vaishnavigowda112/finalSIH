@@ -18,6 +18,7 @@ import {
   Filter
 } from 'lucide-react';
 import { SupportedLanguage } from '../types.js';
+import { fetchApi } from '../lib/api.js';
 
 interface DataScienceAnalyticsHubProps {
   lang: SupportedLanguage;
@@ -84,7 +85,7 @@ export const DataScienceAnalyticsHub: React.FC<DataScienceAnalyticsHubProps> = (
 
   // Fetch system health on mount
   useEffect(() => {
-    fetch('/api/analytics/health')
+    fetchApi('/api/analytics/health')
       .then(res => (res.ok ? res.json() : { status: 'ready' }))
       .then(data => setSystemHealth(data))
       .catch(err => console.warn('Analytics health check notice:', err));
@@ -102,7 +103,7 @@ export const DataScienceAnalyticsHub: React.FC<DataScienceAnalyticsHubProps> = (
     setError(null);
     try {
       const targetCrop = commodityParam || selectedCrop;
-      const res = await fetch('/api/analytics/pipeline', {
+      const res = await fetchApi('/api/analytics/pipeline', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { MandiRecord, SupportedLanguage } from '../types.js';
 import { AudioAssistant } from '../utils/audioAssistant.js';
+import { fetchApi } from '../lib/api.js';
 
 interface CollectorPipelineViewProps {
   lang: SupportedLanguage;
@@ -54,7 +55,7 @@ export function CollectorPipelineView({
     setLoading(true);
     const targetCrop = overrideCommodity || (commodityFilter !== 'ALL' ? commodityFilter : undefined);
     try {
-      const res = await fetch('/api/mandi/collector/sync', {
+      const res = await fetchApi('/api/mandi/collector/sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -115,7 +116,7 @@ export function CollectorPipelineView({
         runHarvest(undefined, parsed);
       } else {
         // Validate single record via API
-        const res = await fetch('/api/mandi/validate-record', {
+        const res = await fetchApi('/api/mandi/validate-record', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(parsed)

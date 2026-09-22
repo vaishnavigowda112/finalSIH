@@ -9,6 +9,8 @@
  * 3. Open reverse geocoding via standard free OpenStreetMap Nominatim or pure spatial centroid lookup
  */
 
+import { fetchApi } from '../lib/api.js';
+
 export interface GpsLocationResult {
   latitude: number;
   longitude: number;
@@ -156,7 +158,7 @@ export async function reverseGeocodeLiveCoordinates(lat: number, lng: number): P
   isWithinMaharashtra: boolean;
 }> {
   try {
-    const res = await fetch(`/api/gps/reverse-geocode?lat=${lat}&lng=${lng}`, {
+    const res = await fetchApi(`/api/gps/reverse-geocode?lat=${lat}&lng=${lng}`, {
       signal: AbortSignal.timeout(4000)
     });
     if (res.ok) {
@@ -188,7 +190,7 @@ export async function reverseGeocodeLiveCoordinates(lat: number, lng: number): P
  * Fallback to live server network geolocation when browser denies permission
  */
 export async function fetchLiveGpsFromService(): Promise<GpsLocationResult> {
-  const res = await fetch('/api/gps/live-locate', {
+  const res = await fetchApi('/api/gps/live-locate', {
     signal: AbortSignal.timeout(5000)
   });
   if (!res.ok) {

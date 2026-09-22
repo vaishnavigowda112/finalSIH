@@ -70,6 +70,7 @@ import { FarmerWelcomeBanner } from './components/FarmerWelcomeBanner.js';
 import { LeftSidebarDashboard, SidebarTab } from './components/LeftSidebarDashboard.js';
 import { ExecutiveMainDashboard } from './components/ExecutiveMainDashboard.js';
 import { DataScienceAnalyticsHub } from './components/DataScienceAnalyticsHub.js';
+import { fetchApi } from './lib/api.js';
 
 export default function App() {
   const [lang, setLang] = useState<SupportedLanguage>('mr'); // Default to Marathi for Maharashtra specificity
@@ -230,7 +231,7 @@ export default function App() {
 
   // Fetch Route Presets
   useEffect(() => {
-    fetch('/api/mandi/routes/presets')
+    fetchApi('/api/mandi/routes/presets')
       .then((res) => res.json())
       .then((data) => {
         if (data.presets) setRoutePresets(data.presets);
@@ -315,7 +316,7 @@ export default function App() {
     try {
       await Promise.allSettled([
         // 1. Fetch 3-Way Channels Comparison
-        fetch('/api/mandi/channels/compare', {
+        fetchApi('/api/mandi/channels/compare', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -336,7 +337,7 @@ export default function App() {
           .catch((err) => console.warn('Channel comparison fetch notice:', err)),
 
         // 2. Fetch Traditional Mandi Net Realization
-        fetch('/api/mandi/recommend', {
+        fetchApi('/api/mandi/recommend', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -355,7 +356,7 @@ export default function App() {
           .catch((err) => console.warn('Mandi recommend fetch notice:', err)),
 
         // 3. Fetch Trend & Forecast
-        fetch(
+        fetchApi(
           `/api/mandi/trend?commodity=${encodeURIComponent(selectedCommodity)}&market=${encodeURIComponent(
             selectedMarket
           )}`
@@ -372,7 +373,7 @@ export default function App() {
           .catch((err) => console.warn('Trend fetch notice:', err)),
 
         // 4. Fetch Map Mandis with Exact Lat/Lng
-        fetch(
+        fetchApi(
           currentGps
             ? `/api/mandi/map?commodity=${encodeURIComponent(selectedCommodity)}&location=${encodeURIComponent(
                 farmerLocation
@@ -390,7 +391,7 @@ export default function App() {
           .catch((err) => console.warn('Map fetch notice:', err)),
 
         // 5. Fetch Buyer Matches
-        fetch('/api/buyers/match', {
+        fetchApi('/api/buyers/match', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -430,7 +431,7 @@ export default function App() {
     setChatLoading(true);
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetchApi('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -474,7 +475,7 @@ export default function App() {
   const triggerCollectorSync = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/mandi/collector/sync', {
+      const res = await fetchApi('/api/mandi/collector/sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({})

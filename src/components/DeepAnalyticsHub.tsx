@@ -25,6 +25,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { AudioAssistant } from '../utils/audioAssistant.js';
+import { fetchApi } from '../lib/api.js';
 
 interface DeepAnalyticsHubProps {
   commodity: string;
@@ -58,7 +59,7 @@ export const DeepAnalyticsHub: React.FC<DeepAnalyticsHubProps> = ({
   const fetchDeepAnalytics = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/mandi/analytics/deep', {
+      const res = await fetchApi('/api/mandi/analytics/deep', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
