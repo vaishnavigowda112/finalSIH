@@ -1,0 +1,6 @@
+{
+  "name": "KisanMandi Maharashtra AI - Agmarknet & Agro Channel Intelligence",
+  "description": "Maharashtra APMC Mandi, Food Processor & Retailer Net Realization Engine with Fuel, Toll, Road Quality & Unexpected Head Cost Estimator and Audio/Text support in Marathi, Hindi & English.",
+  "requestFramePermissions": ["microphone", "geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
