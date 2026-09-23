@@ -62,12 +62,15 @@ const handlePipelineRequest = async (req: Request, res: Response) => {
       apiUrl
     );
 
+    const payload = { ...pipelineResult };
+    delete (payload as any).status;
+
     return res.json({
-      status: 'success',
+      status: pipelineResult.status === 'success' ? 'success' : 'degraded',
       source: dataSource,
       commodity,
       timestamp: new Date().toISOString(),
-      ...pipelineResult
+      ...(pipelineResult.status === 'success' ? payload : { message: pipelineResult.message, ...payload })
     });
   } catch (err: any) {
     console.error('Error in /api/analytics/pipeline:', err);

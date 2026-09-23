@@ -102,6 +102,13 @@ export class PythonAnalyticsRunner {
         }
       };
 
+      const pythonBinary = process.env.PYTHON_BIN || 'python3';
+
+      if (process.env.NODE_ENV === 'production' && !process.env.PYTHON_BIN) {
+        console.warn('[PythonAnalyticsRunner] No Python runtime configured; using TypeScript fallback analytics.');
+        return safeResolve(this.generateResilientAnalytics(records, commodity));
+      }
+
       // 6.5s timeout: if python takes longer or hangs, kill and return resilient calculation
       const timeoutId = setTimeout(() => {
         if (!isResolved) {
@@ -120,7 +127,7 @@ export class PythonAnalyticsRunner {
         args.push('--url', directApiUrl);
       }
 
-      const pyProcess = spawn('python3', args, {
+      const pyProcess = spawn(pythonBinary, args, {
         cwd: process.cwd(),
         env: {
           ...process.env,
